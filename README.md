@@ -1,8 +1,38 @@
-# Proyecto Analítica II
+# Proyecto Analítica II — Tarifación Seguro de Salud
+
+## Autores
+**Yedison Cuervo**  
+**Willian Cuaical**
+
+---
+
+## Descripción
+
+Este proyecto aborda el análisis exploratorio y la visualización de datos para la **tarifación de un seguro de salud**. El objetivo es comprender el comportamiento de los asegurados, identificar factores de riesgo, analizar el uso y costo de los servicios, y construir un dashboard interactivo que facilite la toma de decisiones basada en datos.
+
+---
+
+## Metodología
+
+1. **Integración y limpieza de datos:**  
+   Se recopilaron y depuraron datos provenientes de diferentes fuentes: exposición, siniestros y variables sociodemográficas.
+
+2. **Análisis exploratorio de datos (EDA):**  
+   Se generaron métricas descriptivas y visualizaciones para entender la distribución de variables clave, el uso del seguro, los costos y la prevalencia de condiciones.
+
+3. **Visualización de resultados:**  
+   Se crearon gráficos y tableros que resumen los hallazgos principales del EDA.
+
+4. **Dashboard interactivo:**  
+   Se desarrolló una aplicación en Streamlit para visualizar los resultados del EDA de manera dinámica y accesible.
+
+---
 
 ## Estructura del proyecto
-- /src → notebooks de análisis
-- /data → archivos de datos (no incluidos en el repo)
+- /src  - notebooks de análisis
+- /data - archivos de datos (no incluidos en el repo)
+- /streamlit-eda-app (Dashboard que presenta resultados del EDA)
+- /dvc (No se utilizo por el momento  a pesar de que se configuro)
 
 ## Datos
 Descarga los archivos de datos desde este link:
