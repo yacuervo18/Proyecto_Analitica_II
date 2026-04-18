@@ -1,0 +1,13 @@
+mi_proyecto_streamlit/
+│
+├── app.py                # Archivo principal de la aplicación Streamlit
+├── requirements.txt      # Archivo para las dependencias del proyecto
+├── data/                 # Carpeta para almacenar datos
+│   └── dataset.csv       # Ejemplo de archivo de datos
+├── images/               # Carpeta para almacenar imágenes
+│   └── logo.png          # Ejemplo de archivo de imagen
+├── pages/                # Carpeta para páginas adicionales (opcional)
+│   ├── page1.py          # Ejemplo de una página adicional
+│   └── page2.py          # Ejemplo de otra página adicional
+└── utils/                # Carpeta para funciones utilitarias (opcional)
+    └── helpers.py        # Ejemplo de archivo de funciones
