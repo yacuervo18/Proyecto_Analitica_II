@@ -407,7 +407,7 @@ with main_col:
         edad = st.number_input("EDAD", min_value=0, max_value=120, value=35, step=1, label_visibility="collapsed")
     with dem_col2:
         st.markdown("**SEXO**")
-        sexo = st.selectbox("SEXO", ["Femenino", "Masculino", "No binario"], index=0, label_visibility="collapsed")
+        sexo = st.selectbox("SEXO", ["Femenino", "Masculino", "Desconocido"], index=0, label_visibility="collapsed")
     with dem_col3:
         st.markdown("**CIUDAD**")
         ciudad = st.selectbox(
