@@ -7,6 +7,7 @@ import streamlit as st
 
 
 MODEL_PATH = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/modelo_final/glm_optimizado.pkl")
+DIAGRAM_PATH = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/Diagrama_Analitica2.drawio (3).png")
 
 
 st.set_page_config(
@@ -184,7 +185,8 @@ header, #MainMenu, footer {
 .stButton > button {
     border-radius: 14px;
     font-weight: 700;
-    padding: 0.75rem 1rem;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.92rem;
     background: linear-gradient(135deg, #005b96, #00a3e0);
     border: 1px solid #005b96;
     color: #ffffff;
@@ -314,6 +316,7 @@ def initialize_state() -> None:
         "cliente_documento": "",
         "margen_comercial": 0.25,
         "last_margin_pct": None,
+        "active_page": "simulacion",
     }
     for key, value in defaults.items():
         st.session_state.setdefault(key, value)
@@ -369,6 +372,29 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+nav_col1, nav_col2, _ = st.columns([0.85, 0.85, 5.3], gap="small")
+with nav_col1:
+    if st.button("Historia", use_container_width=True, type="primary" if st.session_state.active_page == "historia" else "secondary"):
+        st.session_state.active_page = "historia"
+        st.rerun()
+with nav_col2:
+    if st.button("Simulación", use_container_width=True, type="primary" if st.session_state.active_page == "simulacion" else "secondary"):
+        st.session_state.active_page = "simulacion"
+        st.rerun()
+
+if st.session_state.active_page == "historia":
+    st.markdown('<div style="height:0.9rem"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Historia</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Arquitectura de la solución</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-note">Vista descriptiva del flujo general del proyecto.</div>', unsafe_allow_html=True)
+    if DIAGRAM_PATH.exists():
+        st.image(str(DIAGRAM_PATH), use_container_width=True)
+    else:
+        st.warning(f"No se encontró la imagen en: {DIAGRAM_PATH}")
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.stop()
 
 
 main_col, result_col = st.columns([2.2, 1], gap="large")
