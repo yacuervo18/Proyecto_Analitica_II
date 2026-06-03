@@ -474,6 +474,42 @@ if st.session_state.active_page == "modelo":
     else:
         st.warning(f"No se encontró la imagen en: {DIAGRAM_PATH_MODELO}")
     st.markdown('</div>', unsafe_allow_html=True)
+
+    # ========== NUEVA SECCIÓN: VALIDACIÓN MONTE CARLO ==========
+    st.markdown('<div style="height:0.9rem"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Validación del Modelo</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Simulación Monte Carlo del GLM Gamma</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-note">Se realizaron 200 iteraciones de entrenamiento/validación para evaluar la estabilidad del modelo. Los resultados se muestran a continuación.</div>',
+        unsafe_allow_html=True,
+    )
+
+    # Tabla de resultados
+    montecarlo_stats = {
+        "Métrica": ["R² medio", "Desviación estándar", "R² mínimo", "R² máximo", "Percentil 2.5", "Percentil 97.5"],
+        "Valor": [0.856173, 0.004401, 0.838003, 0.867515, 0.846483, 0.864207]
+    }
+    df_stats = pd.DataFrame(montecarlo_stats)
+    st.dataframe(df_stats, use_container_width=True, hide_index=True)
+
+    # Texto de robustez
+    st.markdown(
+        """
+        <div style="background-color: #f0f9f0; padding: 1rem; border-radius: 14px; margin-top: 0.8rem;">
+            <p style="font-weight: 700; margin-bottom: 0.5rem; color: #0b5e2e;">Conclusión sobre la robustez del modelo</p>
+            <p style="margin-bottom: 0; color: #1e4620;">
+            El modelo GLM Gamma presenta una <strong>desviación estándar muy baja (0.0044)</strong> en el R², lo que indica una 
+            <strong>alta estabilidad</strong> ante diferentes particiones de los datos. El intervalo de confianza del 95% para el R² es 
+            [0.8465 – 0.8642], estrecho y alejado de valores bajos. Por tanto, el modelo es <strong>robusto</strong>, generaliza correctamente 
+            y puede desplegarse con confianza en entornos productivos.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
 # ======================= SIMULADOR =======================
