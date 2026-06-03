@@ -5,17 +5,15 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-
 MODEL_PATH = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/modelo_final/glm_optimizado.pkl")
-DIAGRAM_PATH = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/Diagrama_Analitica2.drawio (3).png")
-
+DIAGRAM_PATH_PREPROC = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/Diagrama_Analitica2.drawio.svg")
+DIAGRAM_PATH_MODELO = Path("/Users/yedisoncuervo/Desktop/PROYECTO_ANALITICA_II/Procesos_modelos.drawio.svg")
 
 st.set_page_config(
     layout="wide",
     page_title="Simulador de Tarifa | SURA",
     page_icon="🩺",
 )
-
 
 st.markdown(
     """
@@ -182,6 +180,7 @@ header, #MainMenu, footer {
     margin: 0.95rem 0;
 }
 
+/* Estilos generales de botones */
 .stButton > button {
     border-radius: 14px;
     font-weight: 700;
@@ -202,6 +201,32 @@ header, #MainMenu, footer {
     background: linear-gradient(135deg, #0b74b8, #24b3ea);
     border: 1px solid #0b74b8;
     color: #ffffff;
+}
+
+/* Botones de navegación más pequeños */
+.nav-bar .stButton > button {
+    padding: 0.3rem 0.4rem !important;
+    font-size: 0.8rem !important;
+    border-radius: 8px !important;
+}
+
+.nav-bar .stButton > button[kind="primary"],
+.nav-bar .stButton > button[kind="secondary"] {
+    border-width: 1px;
+}
+
+.nav-bar .nav-left .stButton > button {
+    border-top-left-radius: 14px !important;
+    border-bottom-left-radius: 14px !important;
+}
+
+.nav-bar .nav-right .stButton > button {
+    border-top-right-radius: 14px !important;
+    border-bottom-right-radius: 14px !important;
+}
+
+.nav-bar .nav-center .stButton > button {
+    border-radius: 0 !important;
 }
 
 .input-caption {
@@ -339,26 +364,31 @@ initialize_state()
 
 try:
     model = load_model()
-    expected_features = list(getattr(model, "feature_names_in_", [
-        "edad",
-        "Sexo_Cd_limpio_M",
-        "Sexo_Cd_limpio_NOBINARIO",
-        "CANCER",
-        "DIABETES",
-        "ENF_CARDIACA",
-        "HIPERTENSION",
-        "ENF_PULMONAR",
-        "num_condiciones",
-        "CIUDAD_NORM_CALI",
-        "CIUDAD_NORM_CARTAGENA",
-        "CIUDAD_NORM_MEDELLIN",
-        "CIUDAD_NORM_SIN_INFORMACION",
-        "meses_expuesto_total",
-    ]))
+    expected_features = list(
+        getattr(
+            model,
+            "feature_names_in_",
+            [
+                "edad",
+                "Sexo_Cd_limpio_M",
+                "Sexo_Cd_limpio_NOBINARIO",
+                "CANCER",
+                "DIABETES",
+                "ENF_CARDIACA",
+                "HIPERTENSION",
+                "ENF_PULMONAR",
+                "num_condiciones",
+                "CIUDAD_NORM_CALI",
+                "CIUDAD_NORM_CARTAGENA",
+                "CIUDAD_NORM_MEDELLIN",
+                "CIUDAD_NORM_SIN_INFORMACION",
+                "meses_expuesto_total",
+            ],
+        )
+    )
 except Exception as error:
     st.error(f"No se pudo cargar el modelo final: {error}")
     st.stop()
-
 
 st.markdown(
     """
@@ -373,32 +403,81 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-nav_col1, nav_col2, _ = st.columns([0.85, 0.85, 5.3], gap="small")
+# ======================= BARRA DE NAVEGACIÓN =======================
+st.markdown('<div class="nav-bar">', unsafe_allow_html=True)
+nav_col1, nav_col2, nav_col3, _ = st.columns([0.8, 0.8, 0.8, 4], gap="small")
+
 with nav_col1:
-    if st.button("Historia", use_container_width=True, type="primary" if st.session_state.active_page == "historia" else "secondary"):
-        st.session_state.active_page = "historia"
+    st.markdown('<div class="nav-left">', unsafe_allow_html=True)
+    if st.button(
+        "Proceso",
+        use_container_width=True,
+        type="primary" if st.session_state.active_page == "preprocesamiento" else "secondary",
+    ):
+        st.session_state.active_page = "preprocesamiento"
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
 with nav_col2:
-    if st.button("Simulación", use_container_width=True, type="primary" if st.session_state.active_page == "simulacion" else "secondary"):
+    st.markdown('<div class="nav-center">', unsafe_allow_html=True)
+    if st.button(
+        "Modelos",
+        use_container_width=True,
+        type="primary" if st.session_state.active_page == "modelo" else "secondary",
+    ):
+        st.session_state.active_page = "modelo"
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+with nav_col3:
+    st.markdown('<div class="nav-right">', unsafe_allow_html=True)
+    if st.button(
+        "Simulador",
+        use_container_width=True,
+        type="primary" if st.session_state.active_page == "simulacion" else "secondary",
+    ):
         st.session_state.active_page = "simulacion"
         st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
-if st.session_state.active_page == "historia":
+st.markdown('</div>', unsafe_allow_html=True)
+
+# ======================= PÁGINA PREPROCESAMIENTO =======================
+if st.session_state.active_page == "preprocesamiento":
     st.markdown('<div style="height:0.9rem"></div>', unsafe_allow_html=True)
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown('<div class="section-label">Historia</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-title">Arquitectura de la solución</div>', unsafe_allow_html=True)
-    st.markdown('<div class="section-note">Vista descriptiva del flujo general del proyecto.</div>', unsafe_allow_html=True)
-    if DIAGRAM_PATH.exists():
-        st.image(str(DIAGRAM_PATH), use_container_width=True)
+    st.markdown('<div class="section-label">Preprocesamiento</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">ETL y transformación de datos</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-note">Diagrama del flujo de extracción, limpieza y preparación de las variables utilizadas por el modelo.</div>',
+        unsafe_allow_html=True,
+    )
+    if DIAGRAM_PATH_PREPROC.exists():
+        st.image(str(DIAGRAM_PATH_PREPROC), use_container_width=True)
     else:
-        st.warning(f"No se encontró la imagen en: {DIAGRAM_PATH}")
+        st.warning(f"No se encontró la imagen en: {DIAGRAM_PATH_PREPROC}")
     st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
+# ======================= PÁGINA MODELO =======================
+if st.session_state.active_page == "modelo":
+    st.markdown('<div style="height:0.9rem"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="glass-card">', unsafe_allow_html=True)
+    st.markdown('<div class="section-label">Modelo Estadístico</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Modelo Elegido - GLM optimizado para prima pura</div>', unsafe_allow_html=True)
+    st.markdown(
+        '<div class="section-note">Modelado, analisis de resultados, selección del mejor modelo y validación.</div>',
+        unsafe_allow_html=True,
+    )
+    if DIAGRAM_PATH_MODELO.exists():
+        st.image(str(DIAGRAM_PATH_MODELO), use_container_width=True)
+    else:
+        st.warning(f"No se encontró la imagen en: {DIAGRAM_PATH_MODELO}")
+    st.markdown('</div>', unsafe_allow_html=True)
+    st.stop()
 
+# ======================= SIMULADOR =======================
 main_col, result_col = st.columns([2.2, 1], gap="large")
-
 
 with main_col:
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
@@ -571,7 +650,6 @@ with main_col:
         st.session_state.prima_comercial_mensual = None
 
         st.toast("Prima pura calculada correctamente", icon="✅")
-
 
 with result_col:
     st.markdown('<div class="result-card">', unsafe_allow_html=True)
