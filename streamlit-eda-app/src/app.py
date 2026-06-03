@@ -466,7 +466,7 @@ if st.session_state.active_page == "modelo":
     st.markdown('<div class="section-label">Modelo Estadístico</div>', unsafe_allow_html=True)
     st.markdown('<div class="section-title">Modelo Elegido - GLM optimizado para prima pura</div>', unsafe_allow_html=True)
     st.markdown(
-        '<div class="section-note">Modelado, analisis de resultados, selección del mejor modelo y validación.</div>',
+        '<div class="section-note">Modelado, análisis de resultados, selección del mejor modelo y validación.</div>',
         unsafe_allow_html=True,
     )
     if DIAGRAM_PATH_MODELO.exists():
